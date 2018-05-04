@@ -27,14 +27,6 @@ public class Application {
 
     public static void main(final String[] args) {
         SpringApplication.run(Application.class);
-
-//        int count = 0;
-//        while (count <= 5) {
-//            final Block nextBlock = nextBlock();
-//            postBlock(nextBlock);
-//            count++;
-//            }
-
     }
 
     @Bean
