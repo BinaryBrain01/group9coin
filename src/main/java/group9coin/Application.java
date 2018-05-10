@@ -10,12 +10,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -35,9 +33,8 @@ public class Application {
     }
 
     @Bean
-    public CommandLineRunner run(final RestTemplate restTemplate, final ApplicationContext ctx) {
+    public CommandLineRunner run(final RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        printBeanNames(ctx);
         return args -> {
             findAndPost5Blocks();
         };
@@ -49,16 +46,6 @@ public class Application {
             postBlock(findNextBlock());
             count++;
         }
-    }
-
-    private void printBeanNames(final ApplicationContext ctx) {
-        final String[] beanNames = ctx.getBeanDefinitionNames();
-        Arrays.sort(beanNames);
-        System.out.println("Beans found:");
-        for (final String beanName : beanNames) {
-            System.out.println(beanName);
-        }
-
     }
 
     public static Block findNextBlock() {
