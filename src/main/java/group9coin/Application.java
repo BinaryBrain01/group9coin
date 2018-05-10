@@ -2,16 +2,17 @@ package group9coin;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import group9coin.domain.*;
+import group9coin.domain.Block;
+import group9coin.domain.Content;
+import group9coin.domain.Header;
+import group9coin.domain.PointDistribution;
 import javafx.util.Pair;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,21 +21,14 @@ import java.util.Random;
 @SpringBootApplication
 public class Application {
 
-    private static final String REST_URI = "http://localhost:9000";
-    private static  RestTemplate restTemplate;
+    private final Group9CoinRestClient restClient = new Group9CoinRestClient();
 
     public static void main(final String[] args) {
         SpringApplication.run(Application.class);
     }
 
     @Bean
-    public RestTemplate restTemplate(final RestTemplateBuilder builder) {
-        return builder.build();
-    }
-
-    @Bean
-    public CommandLineRunner run(final RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+    public CommandLineRunner run() {
         return args -> {
             findAndPost5Blocks();
         };
@@ -43,17 +37,17 @@ public class Application {
     private void findAndPost5Blocks() {
         int count = 0;
         while (count < 5) {
-            postBlock(findNextBlock());
+            restClient.postBlock(findNextBlock());
             count++;
         }
     }
 
-    public static Block findNextBlock() {
-        final Block block = getBlockAtEndOfLongestChain();
+    public Block findNextBlock() {
+        final Block block = restClient.getBlockAtEndOfLongestChain();
         System.out.println("previous hash: " + block.getHash());
         System.out.println("previous blockNr: " +block.getHeader().getBlockNumber());
 
-        final Integer difficulty = getDifficulty().getValue();
+        final Integer difficulty = restClient.getDifficulty().getValue();
         System.out.println("Difficulty: "+ difficulty);
         final Block nextBlock = createBlock(block, difficulty);
         System.out.println("Going to post block: "+ nextBlock);
@@ -61,19 +55,8 @@ public class Application {
         return nextBlock;
     }
 
-    private static Block getBlockAtEndOfLongestChain() {
-        return restTemplate.
-                getForObject(REST_URI + "/blocks/end-of-chain", Block.class);
-    }
 
-    private static Difficulty getDifficulty( ) {
-        return restTemplate.
-                getForObject(REST_URI + "/difficulty", Difficulty.class);
-    }
 
-    private static void postBlock(final Block block) {
-        restTemplate.postForObject(REST_URI + "/blocks", block, Block.class);
-    }
 
     private static Pair<String, Header> createHashAndHeader(final Block prevBlock, final Content content, final Integer difficulty) {
         final Integer blockNumber = prevBlock.getHeader().getBlockNumber() + 1;
