@@ -1,22 +1,32 @@
 package group9coin;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 
 public class HashUtil {
 
-    static boolean isValid(final byte[] hash, final Integer difficulty) {
-        final Integer leadingZeros = leadingZeroCount(hash);
-//      System.out.println("validHash? difficulty " + difficulty + " <= leadingZeros " + leadingZeros );
-        return difficulty <= leadingZeros;
-    }
+    static <T> byte[] createHash(final T objectToHash) {
+        final ObjectMapper objectMapper = new ObjectMapper();
+        String json = "";
 
-    static byte[] createHash(final String stringToHash) {
-        return DigestUtils.sha256(stringToHash);
+        try {
+            json = objectMapper.writeValueAsString(objectToHash);
+        } catch (final JsonProcessingException e) {
+            System.out.println("Failure"); //TODO JD: throw proper exception
+
+        }
+        return DigestUtils.sha256(json);
     }
 
     static String toString(final byte[] hash) {
         return Hex.encodeHexString(hash);
+    }
+
+    static boolean isValid(final byte[] hash, final Integer difficulty) {
+        final Integer leadingZeros = leadingZeroCount(hash);
+        return difficulty <= leadingZeros;
     }
 
     private static int leadingZeroCount(final byte[] hash) {

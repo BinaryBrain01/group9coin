@@ -1,5 +1,6 @@
 package group9coin;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,7 +9,11 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class Application {
 
-    private final Group9CoinRestClient restClient = new Group9CoinRestClient();
+    @Autowired
+    private Group9CoinRestClient restClient;
+
+    @Autowired
+    private BlockGenerator blockGenerator;
 
     public static void main(final String[] args) {
         SpringApplication.run(Application.class);
@@ -24,7 +29,7 @@ public class Application {
     private void findAndPost5Blocks() {
         int count = 0;
         while (count < 5) {
-            restClient.postBlock(new BlockGenerator(restClient).findNextBlock());
+            restClient.postBlock(blockGenerator.findNextBlock());
             count++;
         }
     }

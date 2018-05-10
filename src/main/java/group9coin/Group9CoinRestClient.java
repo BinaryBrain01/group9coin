@@ -2,7 +2,6 @@ package group9coin;
 
 import group9coin.domain.Block;
 import group9coin.domain.Difficulty;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -14,12 +13,12 @@ public class Group9CoinRestClient {
     private final RestTemplate restTemplate;
 
     @Bean
-    public RestTemplate restTemplate(final RestTemplateBuilder builder) {
-        return builder.build();
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 
     Group9CoinRestClient() {
-        restTemplate = restTemplate(new RestTemplateBuilder());
+        restTemplate = restTemplate();
 
     }
 
