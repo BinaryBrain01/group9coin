@@ -35,17 +35,20 @@ public class Application {
     }
 
     @Bean
-    public CommandLineRunner run(final RestTemplate restTemplate, final ApplicationContext ctx) throws Exception {
+    public CommandLineRunner run(final RestTemplate restTemplate, final ApplicationContext ctx) {
         this.restTemplate = restTemplate;
         printBeanNames(ctx);
         return args -> {
-            int count = 0;
-            while (count <= 5) {
-                final Block nextBlock = nextBlock();
-                postBlock(nextBlock);
-                count++;
-            }
+            findAndPost5Blocks();
         };
+    }
+
+    private void findAndPost5Blocks() {
+        int count = 0;
+        while (count < 5) {
+            postBlock(findNextBlock());
+            count++;
+        }
     }
 
     private void printBeanNames(final ApplicationContext ctx) {
@@ -58,7 +61,7 @@ public class Application {
 
     }
 
-    public static Block nextBlock() {
+    public static Block findNextBlock() {
         final Block block = getBlockAtEndOfLongestChain();
         System.out.println("previous hash: " + block.getHash());
         System.out.println("previous blockNr: " +block.getHeader().getBlockNumber());
