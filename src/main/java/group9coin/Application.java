@@ -24,7 +24,7 @@ public class Application {
     private void findAndPost5Blocks() {
         int count = 0;
         while (count < 5) {
-            restClient.postBlock(new BlockCreator(restClient).findNextBlock());
+            restClient.postBlock(new BlockGenerator(restClient).findNextBlock());
             count++;
         }
     }

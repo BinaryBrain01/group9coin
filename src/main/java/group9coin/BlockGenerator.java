@@ -7,18 +7,16 @@ import group9coin.domain.Content;
 import group9coin.domain.Header;
 import group9coin.domain.PointDistribution;
 import javafx.util.Pair;
-import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class BlockCreator {
+public class BlockGenerator {
 
     private final Group9CoinRestClient restClient;
 
-    BlockCreator(final Group9CoinRestClient restClient) {
+    BlockGenerator(final Group9CoinRestClient restClient) {
         this.restClient = restClient;
     }
 
@@ -38,7 +36,7 @@ public class BlockCreator {
 
     private static Pair<String, Header> createHashAndHeader(final Block prevBlock, final Content content, final Integer difficulty) {
         final Integer blockNumber = prevBlock.getHeader().getBlockNumber() + 1;
-        final String contentHash = Hex.encodeHexString(createContentHash(content));
+        final String contentHash = HashUtil.toString(createContentHash(content));
         final String previousHash = prevBlock.getHash();
         return determineHashAndHeader(blockNumber, contentHash, previousHash, difficulty);
     }
@@ -48,24 +46,19 @@ public class BlockCreator {
         Header header = new Header(blockNumber, previousHash, contentHash, String.valueOf(nonce));
         byte[] hash = createHash(header);
 
-        while (!isValidHash(hash, difficulty)) {
+        while (!HashUtil.isValid(hash, difficulty)) {
             nonce += 1;
             header = new Header(blockNumber, previousHash, contentHash, String.valueOf(nonce));
             hash = createHash(header);
         }
 //        System.out.println("difficulty: " + difficulty);
-        final String stringHash = Hex.encodeHexString(hash);
+        final String stringHash = HashUtil.toString(hash);
         System.out.println("found hash string: " + stringHash);
 
 
         return new Pair<>(stringHash, header);
     }
 
-    private static boolean isValidHash(final byte[] hash, final Integer difficulty) {
-        final Integer leadingZeros = leadingZeroCount(hash);
-//      System.out.println("validHash? difficulty " + difficulty + " <= leadingZeros " + leadingZeros );
-        return difficulty <= leadingZeros;
-    }
 
     private static Content createContent() {
         final List<PointDistribution> pointDistribution = new ArrayList<>();
@@ -94,7 +87,7 @@ public class BlockCreator {
         }
 //        System.out.println(json);
 
-        return createHash(json);
+        return HashUtil.createHash(json);
     }
 
     private static byte[] createHash(final Header header) {
@@ -109,34 +102,10 @@ public class BlockCreator {
         }
 //        System.out.println(json);
 
-        return createHash(json);
-    }
-
-    private static byte[] createHash(final String stringToHash) {
-        return DigestUtils.sha256(stringToHash);
+        return HashUtil.createHash(json);
     }
 
 
-    private static int leadingZeroCount(final byte[] hash) {
-        int totalCountLeadingZeros = 0;
-        final byte[] var4 = hash;
-        final int var5 = hash.length;
 
-        for (int var6 = 0; var6 < var5; ++var6) {
-            final byte b = var4[var6];
-            final int lzc = leadingZeroCountOfByte(b);
-            totalCountLeadingZeros += lzc;
-            if (lzc != 8) {
-                break;
-            }
-        }
-
-        return totalCountLeadingZeros;
-    }
-
-    private static int leadingZeroCountOfByte(final byte b) {
-        final int i = b & 255;
-        return Integer.numberOfLeadingZeros(i) - 24;
-    }
 
 }
