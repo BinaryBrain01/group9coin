@@ -7,8 +7,9 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -33,10 +34,10 @@ class BlockGeneratorTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    @Test
-    @DisplayName("Next block is found successfully, difficulty = 0")
-    public void nextBlockFoundSuccessfully() throws DecoderException {
-        final int difficultyValue = 0;
+    @ParameterizedTest
+    @ValueSource(ints = {0, 1, 4, 8, 16})
+    @DisplayName("Next block is found successfully, difficulty:")
+    public void nextBlockFoundSuccessfully(final int difficultyValue) throws DecoderException {
         Integer previousBlockNr = 42;
         setupPreviousBlock(previousBlockNr);
         setupDifficulty(difficultyValue);
