@@ -1,7 +1,6 @@
 package group9coin;
 
-import group9coin.db.BlockRepository;
-import group9coin.db.DbBlock;
+import group9coin.db.BlockDbClient;
 import group9coin.domain.Block;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -19,7 +18,7 @@ public class Application {
     private BlockGenerator blockGenerator;
 
     @Autowired
-    private BlockRepository repository;
+    private BlockDbClient databaseClient;
 
     public static void main(final String[] args) {
         SpringApplication.run(Application.class);
@@ -37,7 +36,7 @@ public class Application {
         while (count < 1) {
             final Block nextBlock = blockGenerator.findNextBlock();
             restClient.postBlock(nextBlock);
-            repository.save(new DbBlock("" + nextBlock.getHeader().getBlockNumber(), nextBlock.getHash())); //TODO JD: fix type
+            databaseClient.saveBlock(nextBlock);
             count++;
         }
     }
