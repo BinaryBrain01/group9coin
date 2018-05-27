@@ -1,0 +1,7 @@
+
+
+
+
+Had to add "spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true" to application.properties to get rid of error
+"SQLFeatureNotSupportedException: Method org.postgresql.jdbc.PgConnection.createClob() is not yet implemented".
+(Hibernate-bug https://hibernate.atlassian.net/browse/HHH-12368, not blocking the application though.)
