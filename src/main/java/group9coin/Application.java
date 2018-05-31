@@ -15,6 +15,9 @@ public class Application {
     private BlockGenerator blockGenerator;
 
     @Autowired
+    private WebServiceClient webServiceClient;
+
+    @Autowired
     private BlockDbClient databaseClient;
 
     public static void main(final String[] args) {
@@ -31,8 +34,14 @@ public class Application {
     private void findAndPost5Blocks() {
         int count = 0;
         while (count < 1) {
-            final Block nextBlock = blockGenerator.findNextBlock();
-            blockGenerator.postBlock(nextBlock);
+            final Block previousBlock = webServiceClient.getBlockAtEndOfLongestChain();
+            System.out.println("previous hash: " + previousBlock.getHash());
+            System.out.println("previous blockNr: " + previousBlock.getHeader().getBlockNumber());
+            final Integer difficulty = webServiceClient.getDifficulty().getValue();
+            System.out.println("Difficulty: " + difficulty);
+
+            final Block nextBlock = blockGenerator.findNextBlock(previousBlock, difficulty);
+            webServiceClient.postBlock(nextBlock);
             databaseClient.saveBlock(nextBlock);
             count++;
         }

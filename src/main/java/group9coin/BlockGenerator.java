@@ -5,7 +5,6 @@ import group9coin.domain.Content;
 import group9coin.domain.Header;
 import group9coin.domain.PointDistribution;
 import javafx.util.Pair;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -15,25 +14,12 @@ import java.util.Random;
 @Component
 public class BlockGenerator {
 
-    @Autowired
-    private Group9CoinRestClient restClient;
-
-    Block findNextBlock() {
-        final Block block = restClient.getBlockAtEndOfLongestChain();
-        System.out.println("previous hash: " + block.getHash());
-        System.out.println("previous blockNr: " + block.getHeader().getBlockNumber());
-        final Integer difficulty = restClient.getDifficulty().getValue();
-        System.out.println("Difficulty: " + difficulty);
-
-        final Block nextBlock = createBlock(block, difficulty);
+    Block findNextBlock(final Block previousBlock, final Integer difficulty) {
+        final Block nextBlock = createBlock(previousBlock, difficulty);
 
         System.out.println("Found next block");
 
         return nextBlock;
-    }
-
-    public void postBlock(final Block block) {
-        restClient.postBlock(block);
     }
 
     private static Pair<String, Header> createHashAndHeader(final Block prevBlock, final Content content, final Integer difficulty) {

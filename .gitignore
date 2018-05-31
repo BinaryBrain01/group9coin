@@ -1,2 +1,2 @@
-git update-index --assume-unchangedtarget/
+/target/
 /.idea/
