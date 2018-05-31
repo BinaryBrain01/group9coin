@@ -4,9 +4,7 @@ import group9coin.domain.Block;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
@@ -43,6 +41,7 @@ class BlockGeneratorTest {
         assertTrue(HashUtil.isValid(hash, difficultyValue), "Hash is supposed to be valid");
     }
 
+
     private Block setupPreviousBlock(final int previousBlockNr) {
         final Block previousBlock = Mockito.mock(Block.class, RETURNS_DEEP_STUBS);
         when(previousBlock.getHeader().getBlockNumber()).thenReturn(previousBlockNr);
@@ -50,5 +49,20 @@ class BlockGeneratorTest {
         return previousBlock;
     }
 
+    @Nested
+    @DisplayName("Finding next block when")
+    class FindBlockTest {
+        @Test
+        @DisplayName("difficulty is 0")
+        void difficulty0() {
+            System.out.println("Example test for method A");
+        }
+
+        @Test
+        @DisplayName("difficulty is 1")
+        void difficulty1() {
+            System.out.println("Example test for method A");
+        }
+    }
 
 }
