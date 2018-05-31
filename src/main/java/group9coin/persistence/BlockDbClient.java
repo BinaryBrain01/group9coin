@@ -1,4 +1,4 @@
-package group9coin.db;
+package group9coin.persistence;
 
 import group9coin.domain.Block;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +10,10 @@ public class BlockDbClient {
     @Autowired
     BlockRepository repository;
 
+    @Autowired
+    BlockConverter blockConverter;
+
     public void saveBlock(final Block block) {
-        final DbBlock dbBlock = new DbBlock("" + block.getHeader().getBlockNumber(), block.getHash()); //TODO JD: fix type
-        repository.save(dbBlock);
+        repository.save(blockConverter.convertToDbEntity(block));
     }
 }

@@ -1,7 +1,7 @@
 package group9coin;
 
-import group9coin.db.BlockDbClient;
 import group9coin.domain.Block;
+import group9coin.persistence.BlockDbClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
