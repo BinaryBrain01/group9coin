@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 class BlockGeneratorTest {
 
     @InjectMocks
-    BlockGenerator blockGenerator;
+    private BlockGenerator blockGenerator;
 
     @BeforeAll
     void initMocks() {

@@ -1,9 +1,9 @@
 package group9coin.persistence;
 
 import group9coin.domain.Block;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class BlockConverter {
 
     public BlockDbEntity convertToDbEntity(final Block block) {

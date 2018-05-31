@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 public class BlockPostgresClient implements BlockDbClient {
 
     @Autowired
-    BlockRepository repository;
+    private BlockRepository repository;
 
     @Autowired
-    BlockConverter blockConverter;
+    private BlockConverter blockConverter;
 
     @Override
     public void saveBlock(final Block block) {

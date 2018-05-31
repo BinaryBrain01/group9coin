@@ -5,13 +5,13 @@ import group9coin.domain.Content;
 import group9coin.domain.Header;
 import group9coin.domain.PointDistribution;
 import javafx.util.Pair;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-@Component
+@Service
 public class BlockGenerator {
 
     Block findNextBlock(final Block previousBlock, final Integer difficulty) {
