@@ -32,7 +32,6 @@ public class BlockGenerator {
         return nextBlock;
     }
 
-
     private static Pair<String, Header> createHashAndHeader(final Block prevBlock, final Content content, final Integer difficulty) {
         final Integer blockNumber = prevBlock.getHeader().getBlockNumber() + 1;
         final String contentHash = HashUtil.toString(HashUtil.createHash(content));
@@ -68,6 +67,4 @@ public class BlockGenerator {
         final Pair<String, Header> hashAndHeader = createHashAndHeader(prevBlock, content, difficulty);
         return new Block(hashAndHeader.getKey(), hashAndHeader.getValue(), content);
     }
-
-
 }
