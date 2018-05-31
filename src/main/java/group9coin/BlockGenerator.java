@@ -32,6 +32,10 @@ public class BlockGenerator {
         return nextBlock;
     }
 
+    public void postBlock(final Block block) {
+        restClient.postBlock(block);
+    }
+
     private static Pair<String, Header> createHashAndHeader(final Block prevBlock, final Content content, final Integer difficulty) {
         final Integer blockNumber = prevBlock.getHeader().getBlockNumber() + 1;
         final String contentHash = HashUtil.toString(HashUtil.createHash(content));

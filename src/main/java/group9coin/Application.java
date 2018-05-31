@@ -12,9 +12,6 @@ import org.springframework.context.annotation.Bean;
 public class Application {
 
     @Autowired
-    private Group9CoinRestClient restClient;
-
-    @Autowired
     private BlockGenerator blockGenerator;
 
     @Autowired
@@ -35,7 +32,7 @@ public class Application {
         int count = 0;
         while (count < 1) {
             final Block nextBlock = blockGenerator.findNextBlock();
-            restClient.postBlock(nextBlock);
+            blockGenerator.postBlock(nextBlock);
             databaseClient.saveBlock(nextBlock);
             count++;
         }
