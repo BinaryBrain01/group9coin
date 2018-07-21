@@ -17,7 +17,7 @@ public class BlockGenerator {
     Block findNextBlock(final Block previousBlock, final Integer difficulty) {
         final Block nextBlock = createBlock(previousBlock, difficulty);
 
-        System.out.println("Found next block");
+        System.out.println("Found next block"); //test
 
         return nextBlock;
     }
